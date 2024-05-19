@@ -10,6 +10,8 @@
       ./hardware-configuration.nix
     ];
 
+  nixpkgs.overlays = [ (import ./overlays/surrealdb-bin.nix) ];
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -85,7 +87,7 @@
   users.users.alar = {
     isNormalUser = true;
     description = "alar";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
       firefox
     #  thunderbird
@@ -103,14 +105,17 @@
   telegram-desktop
   home-manager
   git
-#  gh
+  gnumake
+  gcc
+  libgcc
+  cmake
+  rustup
   ];
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # services.logmein-hamachi.enable = true;
-  # programs.haguichi.enable = true;
-
+  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -126,10 +131,15 @@
   services.openssh.enable = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 23253 ];
+  networking.firewall.allowedTCPPorts = [ 23253 11434 ];
   networking.firewall.allowedUDPPorts = [ 23253 65458 ];
+  networking.firewall.trustedInterfaces = [ "docker0" "enp42s0" ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = true;
+
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.lo.route_localnet" = true;
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -137,6 +147,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 
 }

@@ -37,6 +37,8 @@
     };
   };
 
+  fonts.fontconfig.enable = true;
+
   # TODO: Set your username
   home = {
     username = "alar";
@@ -48,9 +50,20 @@
   home.packages = with pkgs; [ 
     steam 
     gedit
-    inputs.nixvim.packages.${system}.default
     gh
-   ];
+    discord
+    kitty
+    kitty-img
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    handbrake
+    pyenv
+    poetry
+    gcc
+    onlyoffice-bin_latest
+    scribus
+  ];
+
+  
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
@@ -65,7 +78,29 @@
 #    };
 #  };
 
+  programs.zsh = {
+    enable = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+
+    shellAliases = {
+      ll = "ls -l";
+    };
+    history.size = 10000;
+    history.path = "${config.xdg.dataHome}/zsh/history";
   
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ 
+        "git" 
+        "thefuck" 
+        "history"
+        "rust"
+      ];
+      theme = "robbyrussell";
+    };    
+  };
+
 
   #gtk = {
   #  enable = true;
@@ -79,6 +114,6 @@
   systemd.user.startServices = "sd-switch";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "23.11";
+  home.stateVersion = "24.05";
 
 }
