@@ -1,11 +1,11 @@
 # /etc/nixos/packages/surrealdb-bin.nix 
 { stdenv, fetchzip, autoPatchelfHook, glibc, gcc-unwrapped }: stdenv.mkDerivation rec {
   pname = "surrealdb-bin";
-  version = "1.5.0";
+  version = "2.0.0-alpha.6";
 
   src = fetchzip {
     url = "https://github.com/surrealdb/surrealdb/releases/download/v${version}/surreal-v${version}.linux-amd64.tgz";
-    sha256 = "6cc8bda8bd96f4f8783a5643fece3a92bf20219b7772038ad3e9230ad9fa3b51";
+    hash = "sha256-ymDKJS+pcp1lqexdCbFMD+TbxzQlZO62RJYci4vaUl4=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

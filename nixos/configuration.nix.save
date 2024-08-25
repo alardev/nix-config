@@ -127,11 +127,6 @@
   android-tools
   tailwindcss
   wget
-  rustdesk-flutter
-  armcord
-  qt6.full
-  lightburn
-  semeru-jre-bin-11  
   ];
 
   programs.firefox = {
@@ -152,10 +147,12 @@
   virtualisation.virtualbox.host.enableExtensionPack = false;
   users.extraGroups.vboxusers.members = [ "alar" ];
 
-#  services.ollama = {
- #   enable = true;
- #   environmentVariables = {  }
- # }
+  services.ollama = {
+    enable = true;
+    openFirewall = true;
+    host = "0.0.0.0";
+    
+  }
    
   
 

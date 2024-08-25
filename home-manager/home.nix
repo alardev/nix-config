@@ -63,7 +63,11 @@
     scribus
   ];
 
-  
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode.fhs;
+  };
+
 
   # Enable home-manager and git
   programs.home-manager.enable = true;

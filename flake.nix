@@ -30,7 +30,6 @@
         # > Our main nixos configuration file <
         modules = [
           ./nixos/configuration.nix
-          ./nixos/overlays/surrealdb-bin.nix
 	];
 
       };
