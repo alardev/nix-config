@@ -1,123 +1,93 @@
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
+{ config, pkgs, ... }:
 {
-  inputs,
-  lib,
-  config,
-  pkgs,
-  ...
-}: {
-  # You can import other home-manager modules here
   imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModule
-    # inputs.nixvim.homeManagerModules.nixvim
-    # You can also split up your configuration and import pieces of it here:
+    ./neovim.nix
+    ./alacritty.nix
+    ./dconf.nix
   ];
 
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # If you want to use overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
+  nixpkgs.config.allowUnfree = true;
+  home.enableNixpkgsReleaseCheck = false;
 
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
-    config = {
-      # Disable if you don't want unfree packages
-      allowUnfree = true;
-      # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = _: true;
+  home.packages = with pkgs; [
+    neofetch
+    onefetch
+    zip
+    unzip
+    jq
+    sysstat
+    ethtool
+    pciutils
+    usbutils
+    eza
+    rustup
+    neovide
+    gcc
+    curl
+    wget
+    git
+    gh
+  ];
+
+  programs.git = {
+    enable = true;
+    userName = "alardev";
+    userEmail = "alar.okas@protonmail.com";
+  };
+
+  programs.gh = {
+    enable = true;
+  };
+
+  programs.starship = {
+    enable = true;
+
+    settings = {
+      add_newline = false;
+      aws.disabled = true;
+      gcloud.disabled = true;
+      line_break.disabled = true;
+      format = "$shlvl$shell$username$hostname$nix_shell$git_branch$git_commit$git_state$git_status$directory$jobs$cmd_duration$character";
+      shell = {
+        disabled = false;
+        format = "$indicator";
+        fish_indicator = "[FISH](bright-white)";
+        bash_indicator = "[BASH](bright-white) ";
+        zsh_indicator = "[ZSH](bright-white) ";
+      };
+      directory.fish_style_pwd_dir_length = 1; # turn on fish directory truncation
+      directory.truncation_length = 2; # number of directories not to truncate
+      hostname.style = "bold green"; # don't like the default
+      memory_usage.disabled = true; # because it includes cached memory it's reported as full a lot
+      shlvl.disabled = false;
+      username.style_user = "bold purple"; # don't like the default
     };
   };
 
-  fonts.fontconfig.enable = true;
-
-  # TODO: Set your username
-  home = {
-    username = "alar";
-    homeDirectory = "/home/alar";
-  };
-
-  # Add stuff for your user as you see fit:
-  # programs.neovim.enable = true;
-  home.packages = with pkgs; [ 
-    steam 
-    gedit
-    gh
-    discord
-    kitty
-    kitty-img
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-    handbrake
-    pyenv
-    poetry
-    gcc
-    onlyoffice-bin_latest
-    scribus
-  ];
-
-  programs.vscode = {
+  programs.fish = {
     enable = true;
-    package = pkgs.vscode.fhs;
-  };
-
-
-  # Enable home-manager and git
-  programs.home-manager.enable = true;
-#  programs.git = {
-#    enable = true;
-#    userName = "alar";
-#    userEmail = "alar.okas@protonmail.com";
-#    aliases = {
-#      pu = "push";
-#      co = "checkout";
-#      cm = "commit";
-#    };
-#  };
-
-  programs.zsh = {
-    enable = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
+    shellInit = ''clear; neofetch'';
+    interactiveShellInit = ''
+      set fish_greeting # Disable greeting
+    '';
 
     shellAliases = {
-      ll = "ls -l";
+      c = "clear";
+      #serve = "python -m http.server";
+      ls = "exa -l --icons=always";
+      #ns = "nix-shell";
+      rm = "rm -rfv";
+      mv = "mv -v";
+      rgen = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 1d";
+      update = "sudo nixos-rebuild switch";
     };
-    history.size = 10000;
-    history.path = "${config.xdg.dataHome}/zsh/history";
-  
-    oh-my-zsh = {
-      enable = true;
-      plugins = [ 
-        "git" 
-        "thefuck" 
-        "history"
-        "rust"
-      ];
-      theme = "robbyrussell";
-    };    
   };
 
+  #home.file.".config/wezterm/wezterm.lua".source = ./config/wezterm/wezterm.lua;
+  #home.file.".config/rofi/config.rasi".source = ./config/rofi/config.rasi;
+  #home.file.".config/waybar/config".source = ./config/waybar/config;
+  #home.file.".config/waybar/style.css".source = ./config/waybar/style.css;	
 
-  #gtk = {
-  #  enable = true;
-  #  theme.name = "adw-gtk3";
-  #  cursorTheme.name = "Bibata-Modern-Ice"
-  #  iconTheme.name = "GruvboxPlus";
-  #};
-
-
-  # Nicely reload system units when changing configs
-  systemd.user.startServices = "sd-switch";
-
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.05";
-
+  programs.home-manager.enable = true;
 }

@@ -1,12 +1,13 @@
-# Nixvim template
+# Nixos template
 
-This template gives you a good starting point for configuring nixvim standalone.
+This template gives you a good starting point for configuring Nixos with home-manager and no flakes.
 
 ## Configuring
+edit the nixos/configuration.nix and home-manager/ files. After finalizing changes run:
 
-To start configuring, just add or modify the nix files in `./config`.
-If you add a new configuration file, remember to add it to the
-[`config/default.nix`](./config/default.nix) file
+```
+sudo nixos-rebuild switch --upgrade -I nixos-config=path/to/configuration.nix
+```
 
 ## Testing your new configuration
 
