@@ -9,15 +9,6 @@ in {
       NIXOS_OZONE_WL = "1";
     };
 
-    environment.systemPackages = [
-      (pkgs.catppuccin-sddm.override ({
-        flavor = "mocha";
-        font = "Fira Code Nerd Font";
-        background = "${./sddm.wallpaper.png}";
-        loginBackground = true;
-      }))
-    ];
-
     programs.niri = {
       enable = true;
       package = pkgs.niri-unstable;
@@ -38,6 +29,10 @@ in {
     home-manager.users.${conf.username} = {
       home.packages = with pkgs; [
         swayidle
+        cosmic-notifications
+        cosmic-term
+        cosmic-files
+        cosmic-greeter
       ];
 
       services.swayosd = {
@@ -67,19 +62,6 @@ in {
           buildInputs = prev.buildInputs ++ [ pkgs.wayland-scanner ];
         }));
         settings = import ./swaylock.conf.nix { lib = lib; config = config; };
-      };
-
-      services.mako = {
-        enable = true;
-        defaultTimeout = 5000;
-        maxVisible = 3;
-        font = "AlegreyaSans";
-        backgroundColor = config.theme.base;
-        borderColor = config.theme.muted;
-        textColor = config.theme.text;
-        borderSize = 1;
-        borderRadius = 8;
-        icons = false;
       };
     };
   };
