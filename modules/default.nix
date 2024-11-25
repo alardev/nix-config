@@ -18,9 +18,9 @@ in {
 
   documentation.nixos.enable = false;
 
-  time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "Europe/Tallinn";
   i18n = {
-    defaultLocale = "en_US.UTF-8";
+    defaultLocale = "en_IE.UTF-8";
   };
 
   users.users.${conf.username}= {
