@@ -18,13 +18,6 @@ in {
       }))
     ];
 
-    services.displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
-      theme = "catppuccin-mocha";
-      package = pkgs.kdePackages.sddm;
-    };
-
     programs.niri = {
       enable = true;
       package = pkgs.niri-unstable;
@@ -57,15 +50,15 @@ in {
         settings = import ./niri.conf.nix { config = config; };
       };
 
-      programs.fuzzel= {
+      programs.anyrun= {
         enable = true;
-        settings = import ./fuzzel.conf.nix { lib = lib; config = config; };
+        settings = import ./anyrun.conf.nix { lib = lib; config = config; };
       };
 
-      programs.waybar = {
+      programs.ironbar = {
         enable = true;
-        settings = import ./waybar.conf.nix { };
-        style = (import ./waybar.css.nix { config = config; }).style;
+        settings = import ./ironbar.conf.nix { };
+        style = (import ./ironbar.css.nix { config = config; }).style;
       };
 
       programs.swaylock = {
