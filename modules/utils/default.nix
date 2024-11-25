@@ -48,8 +48,8 @@ in {
 
     programs.git = {
       enable = true;
-      userName = "twoneis";
-      userEmail = "sanjay29@sapura.de";
+      userName = "alardev";
+      userEmail = "alar.okas@protonmail.com";
       extraConfig = {
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
